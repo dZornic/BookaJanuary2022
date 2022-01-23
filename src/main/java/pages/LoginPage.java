@@ -96,6 +96,7 @@ public class LoginPage extends BasePage{
         print("User is logged in");
     }
 
+
     public void errorMessageIsDisplayed(){
         assert isElementPresent(errorMessageText) : "Error. The Error Message is not present";
     }

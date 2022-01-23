@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchPage extends BasePage {
@@ -79,17 +80,10 @@ public class SearchPage extends BasePage {
     }
 
     //Wrapper Methods
-
-    public void clickDropDownMenu() {
+    public void clickSortAlphabeticallyButtonFromDropDownMenu() {
         assert isElementPresent(dropDownSortByMenu) : "Error. The Drop Down Sort By Menu is not present";
-        print("Clicking on 'Dropdown' menu");
-        dropDownSortByMenu.click();
-    }
-
-    public void clickSortAlphabeticallyButton() {
-        assert isElementPresent(dropDownSortAlphabeticallyButton) : "Error. The element is not present";
-        print("Clicking on 'SortAlphabetically' Button");
-        dropDownSortAlphabeticallyButton.click();
+        Select dropDown = new Select(driver.findElement(By.className("orderby")));
+        dropDown.selectByVisibleText("A do Ž");
     }
 
     public void searchResultTextIsPresent() {
@@ -124,7 +118,7 @@ public class SearchPage extends BasePage {
         return numberOnTheShoppingCartIcon.getText();
     }
 
-    public void checkTheShoppingCartButtonIsDisplayed(){
+    public void checkTheShoppingCartButtonIsDisplayed() {
         isElementPresent(checkTheShoppingCartButton);
         print("Shopping cart button is present");
     }
@@ -153,7 +147,7 @@ public class SearchPage extends BasePage {
         return actualText;
     }
 
-    public CheckoutPage clickPoruciButtonFromCart(){
+    public CheckoutPage clickPoruciButtonFromCart() {
         Actions actions = new Actions(driver);
         actions.moveToElement(shoppingCartButton).perform();
         print("Mouse hovers over shopping cart icon");
@@ -165,26 +159,23 @@ public class SearchPage extends BasePage {
         return new CheckoutPage(driver);
     }
 
-    public List<WebElement> getAllItems() {
-        List<WebElement> items = driver.findElements(By.className("product-grid grid-layout columns-5"));
-        System.out.println(items.size());
-        for (WebElement item : items) {
-            String currentName = item.findElement(By.xpath(".//h3[@class = 'product__title']")).getText();
-            System.out.println(items.indexOf(item) + "." + currentName);
+    public List<WebElement> getUnsortedList() {
+        List<WebElement> unsortedList = driver.findElements(By.className("product__inner"));
+        for (WebElement e : unsortedList) {
+            String bookTitle = e.findElement(By.className("product__title")).getText();
+            System.out.println("Book title is " + bookTitle);
         }
-        return items;
+        return unsortedList;
     }
 
-    public void searchAllProduct() {
-
-        ArrayList<String> sortedArray = new ArrayList<>();
-        //Stampa posle sortiranja
-        List<WebElement> sortedList = driver.findElements(By.xpath("//div[@class='block products-listing product product-listing-items ']"));
+    public List<WebElement> getSortedList() {
+        List<WebElement> sortedList = driver.findElements(By.className("product__inner"));
         for (WebElement e : sortedList) {
-            String itemName = e.findElement(By.xpath("//div[@class='product-shortname']")).getText();
-            sortedArray.add(itemName);
-            String price = e.findElement(By.xpath("//div[@class='prices-wrapper']")).getText();
-            System.out.println("Cena za  " + itemName + " je " + price);
+            String bookTitle = e.findElement(By.className("product__title")).getText();
+            System.out.println("Book title is " + bookTitle);
         }
+        return sortedList;
     }
+
+
 }

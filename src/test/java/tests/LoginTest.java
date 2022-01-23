@@ -11,19 +11,17 @@ import javax.print.DocFlavor;
 public class LoginTest extends BaseTest {
 
     /**
-     * Log in Test with Valid Username and Valid Password
+     * Login Test with Valid Username and Valid Password
      * 1. Navigate to www.booka.rs
-     * 2. Click on Prijavi Se link
+     * 2. Click on Prijavi Se link in the top right
      * 3. Enter valid username in username text field
      * 4. Enter valid password in password text field
-     * 5. Clcik on Zapamti checkbox
+     * 5. Click on Zapamti checkbox
      * 6. Click on Prijavi Se button
-     * 7. Click on 'odjavi se' button in the dropdown menu
      * <p>
      * expected result:
      * User is logged in
      * Verify that the Avatar button is present
-     * Verify that the 'prijavi se' button is present
      */
 
     @Test
@@ -32,18 +30,17 @@ public class LoginTest extends BaseTest {
         driver = openChromeDriver();
         print("Opening Chrome browser");
         try {
-            LoginPage loginPage = new LoginPage(driver); //instanciranje objekata klase
+            LoginPage loginPage = new LoginPage(driver);
             loginPage.clickPrijaviSeLink();
             loginPage.enterTextInUsernameField(Strings.VALID_USERNAME);
             loginPage.enterTextInPasswordField(Strings.VALID_PASSWORD);
             loginPage.clickZapamtiMeCheckBox();
             loginPage.clickPrijaviSeButton();
             loginPage.sleep();
+            loginPage.avatarButtonIsPresent();
             assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
 
-            //log out
-            loginPage.avatarButtonIsPresent();
-            loginPage.logOutOfTheWebPage();
+
         } finally {
             driver.quit();
         }
@@ -51,13 +48,13 @@ public class LoginTest extends BaseTest {
     }
 
     /**
-     * Log in Test with Valid Username and Invalid Password
+     * Login Test with Valid Username and Invalid Password
      * 1. Navigate to www.booka.rs
      * 2. Click on Prijavi Se link
      * 3. Enter valid username in username text field
      * 4. enter invalid password in password text field
      * 5. click on Prijavi Se button
-     * <p>
+     *
      * expected result:
      * User stays on the Home page and the error message is displayed.
      */
@@ -77,14 +74,33 @@ public class LoginTest extends BaseTest {
             loginPage.clickZapamtiMeCheckBox();
             loginPage.clickPrijaviSeButton();
             loginPage.errorMessageIsDisplayed();
-            assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
             loginPage.getErrorMessageText();
+            assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
             loginPage.clickCloseErrorMessageButton();
         } finally {
             driver.quit();
         }
 
     }
+
+
+    /**Login Test with Invalid username and Valid password then retyped valid username
+     *
+     * 1. Navigate to www.booka.rs
+     * 2. Click on Prijavi Se link
+     * 3. Enter invalid username in username text field
+     * 4. Enter invalid password in password text field
+     * 5. Click on 'Prijavi' Se button
+     * 6. Verify that the 'error message' is present
+     * 7. Clear the invalid username from username text field
+     * 8. Enter valid username in username text field
+     * 9. Click on 'Prijavi se' button
+     *
+     * Expected result:
+     * User is logged in
+     * Verify that the Avatar button is present
+     *
+     */
 
     @Test
     public void LoggingInWithInvalidUsernameAndValidPasswordAndReloggingInWithValidCRedentials() {
@@ -105,12 +121,10 @@ public class LoginTest extends BaseTest {
             loginPage.enterTextInPasswordField(Strings.VALID_PASSWORD);
             loginPage.clickZapamtiMeCheckBox();
             loginPage.clickPrijaviSeButton();
+            loginPage.avatarButtonIsPresent();
             loginPage.sleep();
             assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
 
-            //logout
-            loginPage.avatarButtonIsPresent();
-            loginPage.logOutOfTheWebPage();
 
         }finally{
             driver.quit();

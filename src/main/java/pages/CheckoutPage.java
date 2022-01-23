@@ -45,8 +45,6 @@ public class CheckoutPage extends BasePage {
     WebElement termsCheckbox;
 
 
-
-
     //Constructor
 
     public CheckoutPage(WebDriver driver) {
@@ -57,7 +55,6 @@ public class CheckoutPage extends BasePage {
 
 
     //Wrapper Methods
-    //todo popakuj sve ovo u jednu metodu
 
     public CheckoutPage enterTextInFirstNameField(String text) {
         assert isElementPresent(firstNameTextField) : "Error. FirstName Field is not present";
