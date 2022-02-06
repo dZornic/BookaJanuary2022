@@ -27,8 +27,6 @@ public class SortingTests extends BaseTest{
             assert isCurrentURLEqualTo(Strings.ALPHABETICALLYSORTED_PRODUCT_PAGE_URL) : "Error. Wrong URL. Extected: "
                     + Strings.ALPHABETICALLYSORTED_PRODUCT_PAGE_URL + " Actual: " + Strings.SEARCH_RESULT_PAGE;
 
-
-
         }finally {
             driver.quit();
         }
