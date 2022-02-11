@@ -44,6 +44,9 @@ public class CheckoutPage extends BasePage {
     @FindBy(id = "terms")
     WebElement termsCheckbox;
 
+    @FindBy(id="place_order")
+    public WebElement zavrsiPorudzbinuButton;
+
 
     //Constructor
 
@@ -143,6 +146,16 @@ public class CheckoutPage extends BasePage {
         assert isElementPresent(termsCheckbox) : "Error. Terms checkbox is not present";
         print("Clicking Terms checkbox");
         termsCheckbox.click();
+        sleep();
+        return this;
+    }
+
+    public CheckoutPage assertZavrsiPorudzbinuButtonIsDisplayed() {
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("arguments[0].scrollIntoView();", zavrsiPorudzbinuButton);
+        assert isElementPresent(zavrsiPorudzbinuButton) : "Error. The Zavrsi Porudzbinu Button is not present";
+        print("Završi porudžbinu is present on the Check Page");
+        assert zavrsiPorudzbinuButton.getText().equals("Završi porudžbinu");
         sleep();
         return this;
     }

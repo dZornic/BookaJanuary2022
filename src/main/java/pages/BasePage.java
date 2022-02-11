@@ -1,11 +1,15 @@
 package pages;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasePage {
 
@@ -19,6 +23,17 @@ public class BasePage {
 
     @FindBy(xpath =" //button[@class='search-icon']")
     WebElement searchButton;
+
+    @FindBy(xpath = "*//i[@class='fab-facebook-f']")
+    public WebElement connectToFacebookButton;
+
+    @FindBy(xpath = "*//i[@class='fa-instagram']")
+    public WebElement connectToInstagramButton;
+
+    @FindBy(xpath = "//p[@class='woocommerce-info']")
+    public WebElement nonExistantKeyWordText;
+
+
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -49,6 +64,13 @@ public class BasePage {
         return new SearchPage(driver);
     }
 
+    public void clickSearchButtonInTheSearchBar(){
+        assert isElementPresent(searchButton) : "Error. Search Button is not present";
+        print("Clicking search button");
+        searchButton.click();
+
+    }
+
     public void print(String text) {
         System.out.println(text);
     }
@@ -60,10 +82,45 @@ public class BasePage {
             System.out.println(e.getMessage());
         }
     }
+    public String getNonExistantKeyWordSearchResultText(){
+        String actualText = nonExistantKeyWordText.getText();
+        print("Message is: " + actualText);
+        return actualText;
+    }
 
-    // novi tab
-//    List<String> tabs = new ArrayList(driver.getWindowHandles());
-//        driver.switchTo().window(tabs.get(1));
+
+
+    public void redirectToFacebook() {
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("arguments[0].scrollIntoView();", connectToFacebookButton);
+        sleep();
+        assert isElementPresent(connectToFacebookButton) : "Error. The Facebook Redirect Button is not present on the page";
+        print("The facebook redirect button is present");
+        connectToFacebookButton.click();
+        List<String> tabs = new ArrayList(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        sleep ();
+        assert isCurrentURLEqualTo(Strings.FACEBOOK_BOOKA_PAGE) : "Error. The user is not redirected to Booka Facebook Page";
+        driver.close();
+        driver.switchTo().window(tabs.get(0));
+
+    }
+
+    public void redirectToInstagram() {
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("arguments[0].scrollIntoView();", connectToInstagramButton);
+        sleep();
+        assert isElementPresent(connectToInstagramButton) : "Error. The Instagram Redirect Button is not present on the page";
+        print("The Instagram redirect button is present");
+        connectToInstagramButton.click();
+        List<String> tabs = new ArrayList(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(1));
+        sleep ();
+        assert isCurrentURLEqualTo(Strings.INSTAGRAM_BOOKA_PAGE) : "Error. The user is not redirected to Booka Instagram Page";
+        driver.close();
+        driver.switchTo().window(tabs.get(0));
+
+    }
 
     //is element present
     public boolean isElementPresent(WebElement element) {
@@ -76,6 +133,13 @@ public class BasePage {
             print("Element is not present on page");
             return false;
         }
+    }
+    public boolean isCurrentURLEqualTo(String expectedUrl) {
+        print("isCurrentURLEqualTo ( " + expectedUrl + " )");
+        String currentUrl = driver.getCurrentUrl();
+        print("User is on " + currentUrl);
+        boolean b = currentUrl.equals(expectedUrl);
+        return b;
     }
 
     public void waitForElement(WebElement element) {

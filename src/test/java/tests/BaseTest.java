@@ -1,6 +1,7 @@
 package tests;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import pages.BasePage;
@@ -37,14 +38,26 @@ public class BaseTest {
         boolean b = currentUrl.equals(expectedUrl);
         return b;
     }
+    //is element present
+    public boolean isElementPresent(WebElement element) {
+        print("Element is Present");
+        try {
+            boolean isPresent = element.isDisplayed();
+            return true;
+        } catch (Exception e) {
+            print(e.getMessage());
+            print("Element is not present on page");
+            return false;
+        }
+    }
 
     // High-level methods
     public SearchPage searchItemUsingSearchBar() {
             BasePage basePage = new BasePage(driver);
             basePage.sleep();
-            basePage.enterTextInSearchBar(Strings.ITEM_SEARCH);
+            basePage.enterTextInSearchBar(Strings.VALID_KEYWORD_SEARCH);
             SearchPage searchPage = basePage.clickSearchButton();
-            print("Searching the item: " + Strings.ITEM_SEARCH + " in the search bar");
+            print("Searching the item: " + Strings.VALID_KEYWORD_SEARCH + " in the search bar");
             assert isCurrentURLEqualTo(Strings.SEARCH_RESULT_PAGE) : "Error. Wrong URL.";
             searchPage.searchResultTextIsPresent();
             searchPage.getSearchResultText();

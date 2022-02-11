@@ -20,7 +20,7 @@ public class LoginTest extends BaseTest {
      * 6. Click on Prijavi Se button
      * <p>
      * expected result:
-     * User is logged in
+     * Verify that the User is on the Home page
      * Verify that the Avatar button is present
      */
 
@@ -38,7 +38,9 @@ public class LoginTest extends BaseTest {
             loginPage.clickPrijaviSeButton();
             loginPage.sleep();
             loginPage.avatarButtonIsPresent();
+
             assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
+            assert loginPage.avatarButton.isDisplayed() : "Error. The user is not logged in";
 
 
         } finally {
@@ -56,7 +58,8 @@ public class LoginTest extends BaseTest {
      * 5. click on Prijavi Se button
      *
      * expected result:
-     * User stays on the Home page and the error message is displayed.
+     * Verify that the 'ERROR: The username or password you entered is incorrect. Lost your password?' message is displayed.
+     *
      */
 
     @Test
@@ -75,8 +78,11 @@ public class LoginTest extends BaseTest {
             loginPage.clickPrijaviSeButton();
             loginPage.errorMessageIsDisplayed();
             loginPage.getErrorMessageText();
+
             assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
+            assert loginPage.errorMessageText.getText().contains(Strings.LOGIN_ERROR_MESSAGE) : "Error. The Message is not displayed";
             loginPage.clickCloseErrorMessageButton();
+
         } finally {
             driver.quit();
         }
@@ -97,8 +103,8 @@ public class LoginTest extends BaseTest {
      * 9. Click on 'Prijavi se' button
      *
      * Expected result:
-     * User is logged in
-     * Verify that the Avatar button is present
+     * 10. Verify that the User is on the home page
+     * 11. Verify that the Avatar button is present
      *
      */
 
@@ -123,7 +129,9 @@ public class LoginTest extends BaseTest {
             loginPage.clickPrijaviSeButton();
             loginPage.avatarButtonIsPresent();
             loginPage.sleep();
+
             assert isCurrentURLEqualTo(Strings.HOMEPAGE_URL) : "Error. Wrong URL.";
+            assert loginPage.avatarButton.isDisplayed() : "Error. The Avatar button is not displayed. The user is not logged in.";
 
 
         }finally{

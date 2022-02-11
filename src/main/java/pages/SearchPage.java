@@ -21,19 +21,24 @@ public class SearchPage extends BasePage {
     //Webelements
 
     @FindBy(xpath = "//div[@class='loop-description']//p")
-    WebElement searchResultText;
+    public WebElement searchResultText;
 
-    @FindBy(xpath = "//div[@class='product-grid grid-layout columns-5']")
-    WebElement allItems;
+
 
     @FindBy(xpath = "//h3[@title='Životinja']")
     WebElement bookZivotinja;
+
+    @FindBy(xpath = "//h3[@title='Crna knjiga']")
+    WebElement bookCrnaKnjiga;
+
+    @FindBy(xpath = "//h3[@title='U miso supi']")
+    WebElement bookUMisoSupi;
 
     @FindBy(xpath = "//div[@class='yith-wcwl-add-button']")
     WebElement heartButton;
 
     @FindBy(xpath = "//div[@class='yith-wcwl-wishlistaddedbrowse']/span[@class='feedback']")
-    WebElement itemAddedToWishListText;
+    public WebElement itemAddedToWishListText;
 
     @FindBy(xpath = "//div[@class = 'quantity']/input[@class = 'input-text qty text']")
     WebElement inputQuantityField;
@@ -44,14 +49,20 @@ public class SearchPage extends BasePage {
     @FindBy(xpath = "//a[@data-product_id='44360']")
     WebElement addBookZivotinjaToCart;
 
+    @FindBy(xpath = "//a[@data-product_id='162']")
+    WebElement addBookCrnaKnjigaToCart;
+
+    @FindBy(xpath = "//a[@data-product_id='5']")
+    WebElement addBookUMisoSupiToCart;
+
     @FindBy(xpath = "//a[@class='added_to_cart wc-forward']")
-    WebElement checkTheShoppingCartButton;
+    public WebElement checkTheShoppingCartButton;
 
     @FindBy(xpath = "//button[@class='menu-cart-trigger']")
     WebElement shoppingCartButton;
 
     @FindBy(xpath = "//span[@class='cart-count']")
-    WebElement numberOnTheShoppingCartIcon;
+    public WebElement numberOnTheShoppingCartIcon;
 
     @FindBy(xpath = "//div[@class='widget woocommerce widget_shopping_cart']")
     WebElement shoppingCartDropDownMenu;
@@ -59,17 +70,20 @@ public class SearchPage extends BasePage {
     @FindBy(xpath = "//li[@class='mini_cart_item']/a[@class='remove']")
     WebElement removeItemFromCartButton;
 
+    @FindBy(xpath = "//div[@class='widget woocommerce widget_shopping_cart']/div[@class='widget_shopping_cart_content']/p[@class='buttons']/a[text()='Pogledaj korpu']")
+    public WebElement pogledajKorpuButton;
+
     @FindBy(xpath = "//div[@class='widget woocommerce widget_shopping_cart']/div[@class='widget_shopping_cart_content']/p[@class='buttons']/a[text()='Poruči']")
     WebElement poruciButton;
 
     @FindBy(xpath = "//div[@class='woocommerce-message']")
-    WebElement itemRemovedFromCartTextMessage;
+    public WebElement itemRemovedFromCartTextMessage;
 
     @FindBy(xpath = "//select[@class='orderby']")
     WebElement dropDownSortByMenu;
 
-    @FindBy(xpath = "//select[@class='orderby']//option[text()='A do Ž']")
-    WebElement dropDownSortAlphabeticallyButton;
+//    @FindBy(xpath = "//select[@class='orderby']//option[text()='A do Ž']")
+//    WebElement dropDownSortAlphabeticallyButton;
 
 
     //Constructor
@@ -88,6 +102,7 @@ public class SearchPage extends BasePage {
 
     public void searchResultTextIsPresent() {
         assert isElementPresent(searchResultText) : "Error. The element is not present.";
+        assert searchResultText.getText().equals("Pretražujete rezultate za \"triler\"") : "Error. The search result is incorrect";
     }
 
     public String getSearchResultText() {
@@ -97,7 +112,7 @@ public class SearchPage extends BasePage {
     }
 
     public ProductPage chooseZivotinjaBook() {
-        isElementPresent(bookZivotinja);
+        assert isElementPresent(bookZivotinja): "Error. The element is not present on the page";
         print("Clicking on Zivotinja book");
         bookZivotinja.click();
         sleep();
@@ -113,17 +128,38 @@ public class SearchPage extends BasePage {
         sleep();
     }
 
+    public void addCrnaKnjigaToCart() {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(bookCrnaKnjiga);
+        actions.moveToElement(addBookCrnaKnjigaToCart);
+        actions.click().build().perform();
+        print("Adding a book named 'Crna Knjiga' to the shopping cart.");
+        sleep();
+    }
+
+    public void addUMisoSupiToCart() {
+        JavascriptExecutor js = (JavascriptExecutor)driver;
+        js.executeScript("window.scrollBy(0,600)");
+        sleep();
+        Actions actions = new Actions(driver);
+        actions.moveToElement(bookUMisoSupi);
+        actions.moveToElement(addBookUMisoSupiToCart);
+        actions.click().build().perform();
+        print("Adding a book named 'U Miso Supi' to the shopping cart.");
+        sleep();
+    }
+
     public String getNumberOnTheShoppingCartIcon() {
         print("Getting the Number on the Shopping Cart Icon.");
         return numberOnTheShoppingCartIcon.getText();
     }
 
     public void checkTheShoppingCartButtonIsDisplayed() {
-        isElementPresent(checkTheShoppingCartButton);
+        assert isElementPresent(checkTheShoppingCartButton) : "Error. The element is not present on the page";
         print("Shopping cart button is present");
     }
 
-    //todo ova metoda treba da vraca shopping cart page
+
     public ShoppingCartPage clickCheckTheShoppingCartButton() {
         checkTheShoppingCartButtonIsDisplayed();
         checkTheShoppingCartButton.click();
@@ -145,6 +181,19 @@ public class SearchPage extends BasePage {
         String actualText = itemRemovedFromCartTextMessage.getText();
         print("Message is: " + actualText);
         return actualText;
+    }
+
+    public ShoppingCartPage clickPogledajKorpuButtonFromCart() {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(shoppingCartButton).perform();
+        print("Mouse hovers over shopping cart icon");
+        actions.moveToElement(shoppingCartDropDownMenu).perform();
+        print("Mouse hovers over the Shopping Cart DropDown Menu");
+        actions.moveToElement(pogledajKorpuButton).click();
+        print("Clicking pogledaj korpu Button");
+        pogledajKorpuButton.click();
+        sleep();
+        return new ShoppingCartPage(driver);
     }
 
     public CheckoutPage clickPoruciButtonFromCart() {

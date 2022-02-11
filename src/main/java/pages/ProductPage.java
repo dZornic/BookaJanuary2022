@@ -11,8 +11,8 @@ public class ProductPage extends BasePage {
     @FindBy(xpath = "//div[@class='yith-wcwl-add-button']")
     WebElement heartButton;
 
-    @FindBy(xpath = "//div[@class='yith-wcwl-wishlistaddedbrowse']/span[@class='feedback']")
-    WebElement itemAddedToWishListText;
+    @FindBy(xpath = "//div[@class='yith-wcwl-wishlistaddedbrowse']")
+    public WebElement itemAddedToWishListText;
 
     @FindBy(xpath = "//div[@class = 'quantity']/input[@class = 'input-text qty text']")
     WebElement inputQuantityField;
@@ -21,7 +21,7 @@ public class ProductPage extends BasePage {
     WebElement addItemToCart;
 
     @FindBy(xpath = "//div[@class ='woocommerce-message']")
-    WebElement itemAddedToShoppingCart;
+    public WebElement itemAddedToShoppingCart;
 
     @FindBy(xpath = "//span[@class='cart-count']")
     WebElement getItemCountOnTheShoppingCartIcon;
@@ -38,7 +38,7 @@ public class ProductPage extends BasePage {
     //Wrapper Methods
 
     public ProductPage addItemToWishList() {
-        isElementPresent(heartButton);
+        assert isElementPresent(heartButton) : "Error. The element is not present on the page";
         print("Adding Zivotinja Book to Wish List");
         heartButton.click();
         sleep();
@@ -46,13 +46,13 @@ public class ProductPage extends BasePage {
     }
 
     public ProductPage itemAddedToWishListTextIsDisplayed() {
-        isElementPresent(itemAddedToWishListText);
+        assert isElementPresent(itemAddedToWishListText) : "Error. The element is not present on the page";
         print("Item is added to your wish list");
         return this;
     }
 
     public ProductPage clearThenEnterQuantityInQuantityField(String text) {
-        isElementPresent(inputQuantityField);
+        assert isElementPresent(inputQuantityField) : "Error. The element is not present on the page";
         print("Inputting " + text + " in quantity field");
         inputQuantityField.click();
         inputQuantityField.clear();
@@ -62,7 +62,7 @@ public class ProductPage extends BasePage {
     }
 
     public ProductPage addItemToShoppingCart() {
-        isElementPresent(addItemToCart);
+        assert isElementPresent(addItemToCart) : "Error. The element is not present on the page";
         print("Adding item to shopping cart");
         addItemToCart.click();
         sleep();
@@ -72,7 +72,7 @@ public class ProductPage extends BasePage {
     public String getItemAddedToShoppingCartText() {
         String actualText = itemAddedToShoppingCart.getText();
         print("Message is: " + actualText);
-        return actualText;
+        return itemAddedToShoppingCart.getText();
     }
     public String getNewNumberOnTheShoppingCartIcon() {
         print("Getting the Number on the Shopping Cart Icon.");

@@ -26,13 +26,13 @@ public class LoginPage extends BasePage{
     WebElement prijaviSeButton;
 
     @FindBy(xpath ="//ul[@class='woocommerce-error']")
-    WebElement errorMessageText;
+    public WebElement errorMessageText;
 
     @FindBy(xpath ="//button[@class='tokoo-popup__close']")
     WebElement closeErrorMessageButton;
 
     @FindBy(xpath ="//button[@class='menu-user-avatar']")
-    WebElement avatarButton;
+    public WebElement avatarButton;
 
     @FindBy(xpath = "//div[@class='menu-user-wrap']")
     WebElement mainMenu;
@@ -113,15 +113,14 @@ public class LoginPage extends BasePage{
         closeErrorMessageButton.click();
     }
 
-    public void logOutOfTheWebPage() {
-        Actions actions = new Actions(driver);
-        actions.moveToElement(mainMenu);
-        print("Clicking OdjaviSe Button");
-        actions.moveToElement(odjaviSeButton).click();
-        odjaviSeButton.click();
-        sleep();
-
-    }
-
+//    public void logOutOfTheWebPage() {
+//        Actions actions = new Actions(driver);
+//        actions.moveToElement(mainMenu);
+//        print("Clicking OdjaviSe Button");
+//        actions.moveToElement(odjaviSeButton).click();
+//        odjaviSeButton.click();
+//        sleep();
+//
+//    }
 
 }
